@@ -3,10 +3,10 @@ import { motion } from 'framer-motion';
 import { 
   LayoutDashboard, 
   Receipt, 
-  PiggyBank, // Note: You might want to import PiggyBank if it was used for Budgets previously, or use Wallet as per your upload
+  TrendingUp, 
   Settings, 
   Wallet,
-  Info, // Add Info icon for About
+  Info,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';

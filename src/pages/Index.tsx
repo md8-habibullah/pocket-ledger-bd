@@ -85,7 +85,7 @@ const Index = () => {
         <StatCard
           title="Savings Rate"
           value={`${stats.savingsRate.toFixed(1)}%`}
-          icon={PiggyBank}
+          icon={TrendingUp}
           delay={0.3}
         />
       </div>
