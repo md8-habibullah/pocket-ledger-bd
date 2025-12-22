@@ -75,17 +75,17 @@ export function QuickEntry({ onAdd }: QuickEntryProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="flex justify-center gap-6"
+            className="flex justify-center gap-8"
           >
             {/* Expense Button (Minus) */}
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setActiveType('expense')}
-              className="group relative flex h-24 w-36 items-center justify-center rounded-[2rem] bg-gradient-to-br from-destructive/20 to-destructive/10 border-2 border-destructive/30 hover:border-destructive/60 transition-all duration-300 hover:shadow-[0_0_30px_hsl(0_72%_51%_/_0.3)]"
+              className="group relative flex h-32 w-48 items-center justify-center rounded-[2rem] bg-gradient-to-br from-destructive/20 to-destructive/10 border-2 border-destructive/30 hover:border-destructive/60 transition-all duration-300 hover:shadow-[0_0_30px_hsl(0_72%_51%_/_0.3)]"
             >
               <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-destructive/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <Minus className="h-12 w-12 text-destructive transition-transform group-hover:scale-110" strokeWidth={3} />
+              <Minus className="h-16 w-16 text-destructive transition-transform group-hover:scale-110" strokeWidth={3} />
             </motion.button>
 
             {/* Income Button (Plus) */}
@@ -93,10 +93,10 @@ export function QuickEntry({ onAdd }: QuickEntryProps) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setActiveType('income')}
-              className="group relative flex h-24 w-36 items-center justify-center rounded-[2rem] bg-gradient-to-br from-secondary/20 to-secondary/10 border-2 border-secondary/30 hover:border-secondary/60 transition-all duration-300 hover:shadow-[0_0_30px_hsl(160_84%_39%_/_0.3)]"
+              className="group relative flex h-32 w-48 items-center justify-center rounded-[2rem] bg-gradient-to-br from-secondary/20 to-secondary/10 border-2 border-secondary/30 hover:border-secondary/60 transition-all duration-300 hover:shadow-[0_0_30px_hsl(160_84%_39%_/_0.3)]"
             >
               <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-secondary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <Plus className="h-12 w-12 text-secondary transition-transform group-hover:scale-110" strokeWidth={3} />
+              <Plus className="h-16 w-16 text-secondary transition-transform group-hover:scale-110" strokeWidth={3} />
             </motion.button>
           </motion.div>
         ) : (
@@ -106,13 +106,13 @@ export function QuickEntry({ onAdd }: QuickEntryProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             className={cn(
-              "glass rounded-2xl p-6 border-2",
+              "glass rounded-2xl p-8 border-2",
               activeType === 'income' ? "border-secondary/30" : "border-destructive/30"
             )}
           >
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-6">
               <h3 className={cn(
-                "text-lg font-semibold",
+                "text-2xl font-semibold",
                 activeType === 'income' ? "text-secondary" : "text-destructive"
               )}>
                 Quick {activeType === 'income' ? 'Income' : 'Expense'}
@@ -121,16 +121,16 @@ export function QuickEntry({ onAdd }: QuickEntryProps) {
                 variant="ghost"
                 size="icon"
                 onClick={resetForm}
-                className="h-8 w-8"
+                className="h-10 w-10"
               >
-                <X className="h-4 w-4" />
+                <X className="h-5 w-5" />
               </Button>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-4">
               {/* Amount */}
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-lg">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-2xl">
                   {symbol}
                 </span>
                 <Input
@@ -140,7 +140,7 @@ export function QuickEntry({ onAdd }: QuickEntryProps) {
                   placeholder="0"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="pl-8 h-12 text-lg font-mono bg-muted/50 border-border/50"
+                  className="pl-8 h-14 text-xl font-mono bg-muted/50 border-border/50"
                   autoFocus
                 />
               </div>
@@ -150,12 +150,12 @@ export function QuickEntry({ onAdd }: QuickEntryProps) {
                 placeholder="What was this for?"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="h-12 bg-muted/50 border-border/50"
+                className="h-14 text-lg bg-muted/50 border-border/50"
               />
 
               {/* Category */}
               <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger className="h-12 bg-muted/50 border-border/50">
+                <SelectTrigger className="h-14 text-lg bg-muted/50 border-border/50">
                   <SelectValue placeholder="Category" />
                 </SelectTrigger>
                 <SelectContent className="glass-strong border-border/50">
@@ -178,13 +178,13 @@ export function QuickEntry({ onAdd }: QuickEntryProps) {
                 onClick={handleSubmit}
                 disabled={isSubmitting || !amount || !description || !category}
                 className={cn(
-                  "h-12 text-primary-foreground",
+                  "h-14 text-lg text-primary-foreground",
                   activeType === 'income' 
                     ? "bg-secondary hover:bg-secondary/90" 
                     : "bg-destructive hover:bg-destructive/90"
                 )}
               >
-                <Check className="h-5 w-5 mr-2" />
+                <Check className="h-6 w-6 mr-2" />
                 {isSubmitting ? 'Adding...' : 'Add'}
               </Button>
             </div>
