@@ -6,7 +6,7 @@ import { SpendingChart } from '@/components/dashboard/SpendingChart';
 import { CategoryChart } from '@/components/dashboard/CategoryChart';
 import { RecentTransactions } from '@/components/dashboard/RecentTransactions';
 import { QuickEntry } from '@/components/dashboard/QuickEntry';
-import { TransactionDialog } from '@/components/transactions/AddTransactionDialog'; // Import Dialog
+import { TransactionDialog } from '@/components/transactions/AddTransactionDialog';
 import { useTransactions } from '@/hooks/useTransactions';
 import { useCurrency } from '@/hooks/useCurrency';
 import { initializeDatabase, type Transaction } from '@/db';
@@ -16,7 +16,7 @@ const Index = () => {
     transactions,
     stats,
     addTransaction,
-    updateTransaction // Get update function
+    updateTransaction
   } = useTransactions();
 
   const { formatCurrency } = useCurrency();
@@ -38,7 +38,7 @@ const Index = () => {
   // Handle Add Click (from QuickEntry or Dialog close reset)
   const handleOpenAdd = () => {
     setTransactionToEdit(undefined);
-    setIsDialogOpen(false); // QuickEntry handles its own add, but this resets the state
+    setIsDialogOpen(false);
   };
 
   return (

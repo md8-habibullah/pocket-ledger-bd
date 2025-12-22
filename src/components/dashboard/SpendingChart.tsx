@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { useCurrency } from '@/hooks/useCurrency'; // Import hook
+import { useCurrency } from '@/hooks/useCurrency';
 
 interface SpendingChartProps {
   data: Array<{
@@ -11,7 +11,7 @@ interface SpendingChartProps {
 }
 
 export function SpendingChart({ data }: SpendingChartProps) {
-  const { formatCurrency, symbol } = useCurrency(); // Use hook
+  const { formatCurrency, symbol } = useCurrency();
 
   return (
     <motion.div
@@ -40,10 +40,10 @@ export function SpendingChart({ data }: SpendingChartProps) {
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(222, 30%, 18%)" vertical={false} />
             <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: 'hsl(215, 20%, 55%)', fontSize: 12 }} />
-            <YAxis 
-              axisLine={false} 
-              tickLine={false} 
-              tick={{ fill: 'hsl(215, 20%, 55%)', fontSize: 12 }} 
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: 'hsl(215, 20%, 55%)', fontSize: 12 }}
               tickFormatter={(value) => `${symbol}${value / 1000}k`} // Dynamic symbol
             />
             <Tooltip
