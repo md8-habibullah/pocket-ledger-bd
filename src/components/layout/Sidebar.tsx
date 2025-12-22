@@ -13,7 +13,8 @@ import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
-const navItems = [
+// Export this array to reuse in MainLayout
+export const navItems = [
   { path: '/', icon: LayoutDashboard, label: 'Overview' },
   { path: '/ledger', icon: Receipt, label: 'Ledger' },
   { path: '/budgets', icon: PiggyBank, label: 'Budgets' },
@@ -29,7 +30,8 @@ export function Sidebar() {
       initial={{ x: -20, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       className={cn(
-        "fixed left-0 top-0 z-40 h-screen border-r border-border/50 bg-sidebar transition-all duration-300",
+        // Added "hidden md:flex" to hide on mobile and show on desktop
+        "fixed left-0 top-0 z-40 h-screen hidden md:flex flex-col border-r border-border/50 bg-sidebar transition-all duration-300",
         collapsed ? "w-20" : "w-64"
       )}
     >
