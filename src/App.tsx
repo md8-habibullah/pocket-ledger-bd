@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Ledger from "./pages/Ledger";
 import Budgets from "./pages/Budgets";
 import Settings from "./pages/Settings";
+import About from "./pages/About"; // Import About
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/ledger" element={<Ledger />} />
           <Route path="/budgets" element={<Budgets />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/about" element={<About />} /> {/* Add Route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

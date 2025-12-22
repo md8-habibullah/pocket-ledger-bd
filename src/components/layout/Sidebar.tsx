@@ -3,9 +3,10 @@ import { motion } from 'framer-motion';
 import { 
   LayoutDashboard, 
   Receipt, 
-  PiggyBank, 
+  PiggyBank, // Note: You might want to import PiggyBank if it was used for Budgets previously, or use Wallet as per your upload
   Settings, 
   Wallet,
+  Info, // Add Info icon for About
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
@@ -13,12 +14,13 @@ import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
-// Export this array to reuse in MainLayout
+// Update navItems array
 export const navItems = [
   { path: '/', icon: LayoutDashboard, label: 'Overview' },
   { path: '/ledger', icon: Receipt, label: 'Ledger' },
-  { path: '/budgets', icon: Wallet, label: 'Budgets' },
+  { path: '/budgets', icon: Wallet, label: 'Budgets' }, // Kept Wallet based on your upload
   { path: '/settings', icon: Settings, label: 'Settings' },
+  { path: '/about', icon: Info, label: 'About' }, // Added About
 ];
 
 export function Sidebar() {
@@ -30,7 +32,6 @@ export function Sidebar() {
       initial={{ x: -20, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       className={cn(
-        // Added "hidden md:flex" to hide on mobile and show on desktop
         "fixed left-0 top-0 z-40 h-screen hidden md:flex flex-col border-r border-border/50 bg-sidebar transition-all duration-300",
         collapsed ? "w-20" : "w-64"
       )}
