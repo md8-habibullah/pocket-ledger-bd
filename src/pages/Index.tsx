@@ -20,7 +20,7 @@ const Index = () => {
   } = useTransactions();
 
   const { formatCurrency } = useCurrency();
-  
+
   // State for Edit Dialog
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [transactionToEdit, setTransactionToEdit] = useState<Transaction | undefined>(undefined);
@@ -58,12 +58,6 @@ const Index = () => {
       {/* Quick Entry */}
       <QuickEntry onAdd={addTransaction} />
 
-      {/* Charts Grid */}
-      <div className="grid gap-6 lg:grid-cols-2 mb-8">
-        <SpendingChart data={stats.monthlyTrends} />
-        <CategoryChart data={stats.categoryBreakdown} />
-      </div>
-
       {/* Stats Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
         <StatCard
@@ -96,10 +90,18 @@ const Index = () => {
         />
       </div>
 
+      {/* Charts Grid */}
+      <div className="grid gap-6 lg:grid-cols-2 mb-8">
+        <SpendingChart data={stats.monthlyTrends} />
+        <CategoryChart data={stats.categoryBreakdown} />
+      </div>
+
+
+
       {/* Recent Transactions with Edit functionality */}
-      <RecentTransactions 
-        transactions={transactions} 
-        onEdit={handleEditClick} 
+      <RecentTransactions
+        transactions={transactions}
+        onEdit={handleEditClick}
       />
 
       {/* Transaction Dialog for Editing */}
