@@ -259,12 +259,12 @@ const Ledger = () => {
       {/* Transactions Table */}
       <div className="glass rounded-2xl border border-border/50 overflow-hidden">
         {/* Table Header */}
-        <div className="grid grid-cols-[auto,1fr,1fr,1fr,1fr,auto] gap-4 p-4 border-b border-border/50 text-sm font-medium text-muted-foreground">
+        <div className="grid grid-cols-[auto,1fr,1fr,1fr,auto] sm:grid-cols-[auto,1fr,1fr,1fr,1fr,auto] gap-4 p-4 border-b border-border/50 text-sm font-medium text-muted-foreground">
           <Checkbox
             checked={selectedIds.length === filteredTransactions.length && filteredTransactions.length > 0}
             onCheckedChange={handleSelectAll}
           />
-          <span>Description</span>
+          <span className="hidden sm:block">Description</span>
           <span>Category</span>
           <span>Date</span>
           <span className="text-right">Amount</span>
@@ -286,9 +286,9 @@ const Ledger = () => {
                 transition={{ delay: index * 0.02 }}
                 onClick={() => handleRowClick(txn)} // Row click handler
                 className={cn(
-                  "grid grid-cols-[auto,1fr,1fr,1fr,1fr,auto] gap-4 p-4 items-center transition-colors hover:bg-muted/30 cursor-pointer", // Added cursor-pointer
-                  selectedIds.includes(txn.id!) && "bg-primary/5"
-                )}
+                      "grid grid-cols-[auto,1fr,1fr,1fr,auto] sm:grid-cols-[auto,1fr,1fr,1fr,1fr,auto] gap-4 p-4 items-center transition-colors hover:bg-muted/30 cursor-pointer",
+                      selectedIds.includes(txn.id!) && "bg-primary/5"
+                    )}
               >
                 <div onClick={(e) => e.stopPropagation()}> 
                   {/* Stop propagation for Checkbox */}
@@ -298,7 +298,7 @@ const Ledger = () => {
                   />
                 </div>
                 
-                <div className="flex items-center gap-3">
+                    <div className="hidden sm:flex items-center gap-3 min-w-0">
                   <div className={cn(
                     "flex h-8 w-8 items-center justify-center rounded-lg",
                     txn.type === 'income' 
@@ -311,7 +311,7 @@ const Ledger = () => {
                       <ArrowDownRight className="h-4 w-4" />
                     )}
                   </div>
-                  <span className="font-medium truncate">{txn.description}</span>
+                  <span className="font-medium truncate min-w-0">{txn.description}</span>
                 </div>
 
                 <div className="flex items-center gap-2">
