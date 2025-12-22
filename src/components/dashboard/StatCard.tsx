@@ -57,9 +57,10 @@ export function StatCard({
           {change !== undefined && (
             <div className={cn(
               "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium",
+              // Ensure growth uses Emerald and decline/expense uses Rose
               change >= 0
-                ? "bg-secondary/20 text-secondary"
-                : "bg-destructive/20 text-destructive"
+                ? "bg-emerald-500/20 text-emerald-500"
+                : "bg-rose-500/20 text-rose-500"
             )}>
               {change >= 0 ? '↑' : '↓'} {Math.abs(change).toFixed(1)}%
             </div>

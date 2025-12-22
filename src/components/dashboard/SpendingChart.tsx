@@ -70,7 +70,7 @@ export function SpendingChart({ data }: SpendingChartProps) {
               axisLine={false}
               tickLine={false}
               tick={{ fill: 'hsl(215, 20%, 55%)', fontSize: 12 }}
-              tickFormatter={(value) => `$${value / 1000}k`}
+              tickFormatter={(value) => `৳${value / 1000}k`} // Changed $ to ৳
             />
             <Tooltip
               contentStyle={{
@@ -93,7 +93,9 @@ export function SpendingChart({ data }: SpendingChartProps) {
               type="monotone"
               dataKey="expenses"
               stroke="hsl(346, 84%, 61%)" // Rose
-            // ...
+              fill="url(#expenseGradient)" // Add this line!
+              strokeWidth={2}
+              name="Expenses"
             />
           </AreaChart>
         </ResponsiveContainer>
@@ -101,11 +103,11 @@ export function SpendingChart({ data }: SpendingChartProps) {
 
       <div className="mt-4 flex items-center justify-center gap-6">
         <div className="flex items-center gap-2">
-          <div className="h-3 w-3 rounded-full bg-secondary" />
+          <div className="h-3 w-3 rounded-full bg-emerald-500" /> {/* Changed from bg-secondary */}
           <span className="text-sm text-muted-foreground">Income</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="h-3 w-3 rounded-full bg-primary" />
+          <div className="h-3 w-3 rounded-full bg-rose-500" /> {/* Changed from bg-primary */}
           <span className="text-sm text-muted-foreground">Expenses</span>
         </div>
       </div>
