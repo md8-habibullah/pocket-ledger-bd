@@ -1,6 +1,5 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, X, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Plus, X, ArrowUpRight, ArrowDownRight, Save } from 'lucide-react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type Transaction } from '@/db';
 import { Button } from '@/components/ui/button';
@@ -11,7 +10,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import {
   Select,
@@ -24,12 +22,21 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { useCurrency } from '@/hooks/useCurrency';
 
-interface AddTransactionDialogProps {
+interface TransactionDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   onAdd: (transaction: Omit<Transaction, 'id' | 'createdAt'>) => Promise<void>;
+  onUpdate: (id: number, updates: Partial<Transaction>) => Promise<void>;
+  transactionToEdit?: Transaction;
 }
 
-export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
-  const [open, setOpen] = useState(false);
+export function TransactionDialog({ 
+  open, 
+  onOpenChange, 
+  onAdd, 
+  onUpdate, 
+  transactionToEdit 
+}: TransactionDialogProps) {
   const [type, setType] = useState<'income' | 'expense'>('expense');
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
@@ -43,6 +50,28 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
     (c) => c.type === type || c.type === 'both'
   );
 
+  // Reset or pre-fill form when the dialog opens or transaction changes
+  useEffect(() => {
+    if (open) {
+      if (transactionToEdit) {
+        setType(transactionToEdit.type);
+        setAmount(transactionToEdit.amount.toString());
+        setDescription(transactionToEdit.description);
+        setCategory(transactionToEdit.category);
+        // Ensure date is in YYYY-MM-DD format for input
+        const dateObj = new Date(transactionToEdit.date);
+        setDate(dateObj.toISOString().split('T')[0]);
+      } else {
+        // Reset defaults for new transaction
+        setType('expense');
+        setAmount('');
+        setDescription('');
+        setCategory('');
+        setDate(new Date().toISOString().split('T')[0]);
+      }
+    }
+  }, [open, transactionToEdit]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -54,40 +83,39 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
     setIsSubmitting(true);
 
     try {
-      await onAdd({
+      const transactionData = {
         amount: parseFloat(amount),
         type,
         description,
         category,
         date: new Date(date),
-      });
+      };
 
-      toast.success('Transaction added successfully!');
-      setOpen(false);
-      
-      // Reset form
-      setAmount('');
-      setDescription('');
-      setCategory('');
-      setDate(new Date().toISOString().split('T')[0]);
+      if (transactionToEdit && transactionToEdit.id) {
+        await onUpdate(transactionToEdit.id, transactionData);
+        toast.success('Transaction updated successfully!');
+      } else {
+        await onAdd(transactionData);
+        toast.success('Transaction added successfully!');
+      }
+
+      onOpenChange(false);
     } catch (error) {
-      toast.error('Failed to add transaction');
+      toast.error('Failed to save transaction');
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const isEditing = !!transactionToEdit;
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="bg-gradient-primary text-primary-foreground hover:opacity-90 glow-primary">
-          <Plus className="mr-2 h-4 w-4" />
-          Add Transaction
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="glass-strong border-border/50 sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold">New Transaction</DialogTitle>
+          <DialogTitle className="text-xl font-semibold">
+            {isEditing ? 'Edit Transaction' : 'New Transaction'}
+          </DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6 mt-4">
@@ -192,7 +220,17 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
             className="w-full h-12 bg-gradient-primary text-primary-foreground hover:opacity-90"
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Adding...' : 'Add Transaction'}
+            {isEditing ? (
+              <>
+                <Save className="mr-2 h-4 w-4" />
+                Save Changes
+              </>
+            ) : (
+              <>
+                <Plus className="mr-2 h-4 w-4" />
+                Add Transaction
+              </>
+            )}
           </Button>
         </form>
       </DialogContent>

@@ -8,10 +8,12 @@ import {
   ArrowUpRight, 
   ArrowDownRight,
   ChevronDown,
-  Check
+  Check,
+  Pencil, // Added Pencil icon
+  Plus    // Added Plus icon
 } from 'lucide-react';
 import { MainLayout } from '@/components/layout/MainLayout';
-import { AddTransactionDialog } from '@/components/transactions/AddTransactionDialog';
+import { TransactionDialog } from '@/components/transactions/AddTransactionDialog'; // Updated import
 import { useTransactions } from '@/hooks/useTransactions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -34,12 +36,14 @@ import {
 } from '@/components/ui/alert-dialog';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { type Transaction } from '@/db';
 
 const Ledger = () => {
   const { 
     transactions, 
     categories,
     addTransaction, 
+    updateTransaction, // Destructure updateTransaction
     deleteTransaction,
     deleteMultipleTransactions 
   } = useTransactions();
@@ -49,6 +53,10 @@ const Ledger = () => {
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  
+  // State for Edit/Add Dialog
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [transactionToEdit, setTransactionToEdit] = useState<Transaction | undefined>(undefined);
 
   const filteredTransactions = useMemo(() => {
     return transactions.filter((txn) => {
@@ -96,6 +104,16 @@ const Ledger = () => {
     toast.success('Transaction deleted');
   };
 
+  const handleAddClick = () => {
+    setTransactionToEdit(undefined);
+    setIsDialogOpen(true);
+  };
+
+  const handleEditClick = (txn: Transaction) => {
+    setTransactionToEdit(txn);
+    setIsDialogOpen(true);
+  };
+
   return (
     <MainLayout>
       {/* Header */}
@@ -108,7 +126,24 @@ const Ledger = () => {
             All your transactions in one place
           </p>
         </div>
-        <AddTransactionDialog onAdd={addTransaction} />
+        
+        {/* Updated Add Button */}
+        <Button 
+          onClick={handleAddClick}
+          className="bg-gradient-primary text-primary-foreground hover:opacity-90 glow-primary"
+        >
+          <Plus className="mr-2 h-4 w-4" />
+          Add Transaction
+        </Button>
+
+        {/* The Dialog Component */}
+        <TransactionDialog 
+          open={isDialogOpen}
+          onOpenChange={setIsDialogOpen}
+          onAdd={addTransaction}
+          onUpdate={updateTransaction}
+          transactionToEdit={transactionToEdit}
+        />
       </div>
 
       {/* Filters */}
@@ -205,7 +240,7 @@ const Ledger = () => {
 
       {/* Transactions Table */}
       <div className="glass rounded-2xl border border-border/50 overflow-hidden">
-        {/* Table Header */}
+        {/* Table Header - Updated Grid Columns for Actions */}
         <div className="grid grid-cols-[auto,1fr,1fr,1fr,1fr,auto] gap-4 p-4 border-b border-border/50 text-sm font-medium text-muted-foreground">
           <Checkbox
             checked={selectedIds.length === filteredTransactions.length && filteredTransactions.length > 0}
@@ -215,7 +250,7 @@ const Ledger = () => {
           <span>Category</span>
           <span>Date</span>
           <span className="text-right">Amount</span>
-          <span className="w-10"></span>
+          <span className="w-20 text-center">Actions</span>
         </div>
 
         {/* Table Body */}
@@ -283,14 +318,27 @@ const Ledger = () => {
                   {txn.type === 'income' ? '+' : '-'}{formatCurrency(txn.amount)}
                 </span>
 
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => handleSingleDelete(txn.id!)}
-                  className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+                {/* Actions: Edit and Delete */}
+                <div className="flex items-center gap-1 justify-end">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => handleEditClick(txn)}
+                    className="h-8 w-8 text-muted-foreground hover:text-primary"
+                    title="Edit"
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => handleSingleDelete(txn.id!)}
+                    className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                    title="Delete"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
               </motion.div>
             ))
           )}
